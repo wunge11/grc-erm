@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem Manajemen Risiko GRC</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h1 id="judul">Sistem GRC</h1>
+
+  <button id="tombol">Klik aku dong</button>
+
+  <h2>Tambah Risiko</h2>
+
+  <input type="text" id="namaRisiko" placeholder="Masukkan nama risiko">
+  <input type="number" id="likelihood" placeholder="Likelihood(1-5)" min="1" max="5">
+  <input type="number" id="impact" placeholder="Impact(1-5)" min="1" max="5">
+  <button id="tambahRisiko">Tambah Risiko</button>
+
+  <p id="hasilRisiko"></p>
+
+  <h2>Daftar Risiko</h2>
+
+<input
+    type="text"
+    id="cariRisiko"
+    placeholder="Cari risiko..."
+>
+
+<select id="filterLevel">
+    <option value="Semua">Semua Level</option>
+    <option value="Sangat Tinggi">Sangat Tinggi</option>
+    <option value="Tinggi">Tinggi</option>
+    <option value="Sedang">Sedang</option>
+    <option value="Rendah">Rendah</option>
+    <option value="Sangat Rendah">Sangat Rendah</option>
+</select>
+
+<select id="urutkanRisiko">
+    <option value="terbesar">Skor Terbesar → Terkecil</option>
+    <option value="terkecil">Skor Terkecil → Terbesar</option>
+</select>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Nama Risiko</th>
+        <th>Likelihood</th>
+        <th>Impact</th>
+        <th>Skor</th>
+        <th>Level</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+
+    <tbody id="daftarRisiko">
+    </tbody>
+  </table>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
