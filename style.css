@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 30px;
+}
+
+h1 {
+    color: #1f2937;
+}
+
+h2 {
+    color: #374151;
+}
+
+input {
+    padding: 10px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #d1d5db;
+}
+
+th {
+    background-color: #e5e7eb;
+}
+
+.level-sangat-tinggi {
+    background-color: #ef4444;
+    color: white;
+}
+
+.level-tinggi {
+    background-color: #f97316;
+    color: white;
+}
+
+.level-sedang {
+    background-color: #facc15;
+}
+
+.level-rendah {
+    background-color: #22c55e;
+    color: white;
+}
+
+.level-sangat-rendah {
+    background-color: #d1d5db;
+}
