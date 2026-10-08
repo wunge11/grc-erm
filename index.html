@@ -19,6 +19,8 @@
   <input type="number" id="likelihood" placeholder="Likelihood(1-5)" min="1" max="5">
   <input type="number" id="impact" placeholder="Impact(1-5)" min="1" max="5">
   <button id="tambahRisiko">Tambah Risiko</button>
+  <button id="batalEdit" style="display: none;">Batal</button>
+
 
   <p id="hasilRisiko"></p>
 
@@ -61,6 +63,22 @@
       <h3>Persentase Risiko Sangat Tinggi</h3>
       <p id="persentaseSangatTinggi">0%</p>
     </div>
+    <div class="card">
+      <h3>Persentase Risiko Tinggi</h3>
+      <p id="persentaseTinggi">0%</p>
+    </div>
+        <div class="card">
+      <h3>Persentase Risiko Sedang</h3>
+      <p id="persentaseSedang">0%</p>
+    </div>
+    <div class="card">
+      <h3>Persentase Risiko Rendah</h3>
+      <p id="persentaseRendah">0%</p>
+    </div>
+    <div class="card">
+      <h3>Persentase Risiko Sangat Rendah</h3>
+      <p id="persentaseSangatRendah">0%</p>
+    </div>
   </div>
 
   <input type="text" id="cariRisiko" placeholder="Cari risiko...">
@@ -78,7 +96,6 @@
     <option value="terbesar">Skor Terbesar → Terkecil</option>
     <option value="terkecil">Skor Terkecil → Terbesar</option>
   </select>
-
 
   <table border="1">
     <thead>
