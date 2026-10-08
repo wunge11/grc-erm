@@ -404,6 +404,9 @@ let hasilRisiko = document.getElementById("hasilRisiko");
 let cariRisiko = document.getElementById("cariRisiko");
 let filterLevel = document.getElementById("filterLevel");
 let urutkanRisiko = document.getElementById("urutkanRisiko");
+let rataRataSkor = document.getElementById("rataRataSkor");
+let chartRisiko = document.getElementById("chartRisiko");
+let presentaseSangatTinggi = document.getElementById("persentaseSangatTinggi");
 
 tombol.addEventListener("click", function () {
     tombol.textContent = "Makasii dah klik aku!";
@@ -443,6 +446,8 @@ function hapusRisiko(id) {
         localStorage.setItem("daftarRisiko", JSON.stringify(daftarRisiko));
 
         tampilkanRisiko();
+        updateDashboard();
+        updateChart();
     }
 }
 
@@ -586,6 +591,8 @@ tambahRisiko.addEventListener("click", function () {
     localStorage.setItem("daftarRisiko", JSON.stringify(daftarRisiko));
 
     prosesFilter();
+    updateDashboard();
+    updateChart();
 
     hasilRisiko.textContent = "Risiko: " + namaRisiko.value +
         " | Skor Risiko: " + skor +
@@ -598,6 +605,25 @@ tambahRisiko.addEventListener("click", function () {
 });
 
 prosesFilter();
+updateDashboard();
+
+// let totalRisiko = document.getElementById("totalRisiko");
+// totalRisiko.textContent = daftarRisiko.length;
+
+// let jumlahSangatTinggi = document.getElementById("jumlahSangatTinggi");
+// jumlahSangatTinggi.textContent = hitungJumlahLevel("Sangat Tinggi");
+
+// let jumlahTinggi = document.getElementById("jumlahTinggi");
+// jumlahTinggi.textContent = hitungJumlahLevel("Tinggi");
+
+// let jumlahSedang = document.getElementById("jumlahSedang");
+// jumlahSedang.textContent = hitungJumlahLevel("Sedang");
+
+// let jumlahRendah = document.getElementById("jumlahRendah");
+// jumlahRendah.textContent = hitungJumlahLevel("Rendah");
+
+// let jumlahSangatRendah = document.getElementById("jumlahSangatRendah");
+// jumlahSangatRendah.textContent = hitungJumlahLevel("Sangat Rendah");
 
 // localStorage.setItem("test", "Halo Wunge");
 
@@ -609,7 +635,7 @@ prosesFilter();
 // localStorage.setItem("dataRisiko", JSON.stringify(data));
 // let dataTersimpan = JSON.parse(localStorage.getItem("dataRisiko"));
 // console.log(dataTersimpan);
-let data = JSON.parse(localStorage.getItem("daftarRisiko"));
+// let data = JSON.parse(localStorage.getItem("daftarRisiko"));
 
 // console.log(data[0]);
 // console.log(data[0].nama);
@@ -627,13 +653,115 @@ let data = JSON.parse(localStorage.getItem("daftarRisiko"));
 // console.log(jumlahSangatTinggi);
 
 function hitungJumlahLevel(level) {
-    return data.filter(function(risiko) {
+    return daftarRisiko.filter(function (risiko) {
         return risiko.level === level;
     }).length;
 }
-console.log("Jumlah Risiko Sangat Tinggi:", hitungJumlahLevel("Sangat Tinggi"));
-console.log("Jumlah Risiko Tinggi:", hitungJumlahLevel("Tinggi"));
-console.log("Jumlah Risiko Sedang:", hitungJumlahLevel("Sedang"));
-console.log("Jumlah Risiko Rendah:", hitungJumlahLevel("Rendah"));
-console.log("Jumlah Risiko Sangat Rendah:", hitungJumlahLevel("Sangat Rendah"));
-console.log("Total Risiko:", data.length);
+
+function hitungPersentaseLevel(level) {
+    if (daftarRisiko.length === 0) {
+        return 0;
+    }
+    return (hitungJumlahLevel(level) / daftarRisiko.length) * 100;
+}
+
+function ambilStatistikRisiko() {
+    return {
+        sangatTinggi: hitungJumlahLevel("Sangat Tinggi"),
+        tinggi: hitungJumlahLevel("Tinggi"),
+        sedang: hitungJumlahLevel("Sedang"),
+        rendah: hitungJumlahLevel("Rendah"),
+        sangatRendah: hitungJumlahLevel("Sangat Rendah")
+    };
+}
+
+// let statistikRisiko = {
+//     sangatTinggi: hitungJumlahLevel("Sangat Tinggi"),
+//     tinggi: hitungJumlahLevel("Tinggi"),
+//     sedang: hitungJumlahLevel("Sedang"),
+//     rendah: hitungJumlahLevel("Rendah"),
+//     sangatRendah: hitungJumlahLevel("Sangat Rendah")
+// };
+// console.log(statistikRisiko);
+
+function updateDashboard() {
+    let statistik = ambilStatistikRisiko();
+
+    let persentase = hitungPersentaseLevel("Sangat Tinggi");
+
+    document.getElementById("persentaseSangatTinggi").textContent =
+        persentase.toFixed(1) + "%";
+
+    let persentaseSangatTinggi = daftarRisiko.length > 0
+        ? (statistik.sangatTinggi / daftarRisiko.length) * 100
+        : 0;
+
+    console.log("Persentase Sangat Tinggi:", persentaseSangatTinggi);
+
+    totalRisiko.textContent = daftarRisiko.length;
+
+    jumlahSangatTinggi.textContent = statistik.sangatTinggi;
+    jumlahTinggi.textContent = statistik.tinggi;
+    jumlahSedang.textContent = statistik.sedang;
+    jumlahRendah.textContent = statistik.rendah;
+    jumlahSangatRendah.textContent = statistik.sangatRendah;
+
+    let totalSkor = daftarRisiko.reduce(function (total, risiko) {
+        return total + risiko.skor;
+    }, 0);
+
+    let rataRata = daftarRisiko.length > 0
+        ? totalSkor / daftarRisiko.length
+        : 0;
+
+    rataRataSkor.textContent = rataRata.toFixed(1);
+}
+
+function updateChart() {
+    let statistik = ambilStatistikRisiko();
+
+    grafikRisiko.data.datasets[0].data = [
+        statistik.sangatTinggi,
+        statistik.tinggi,
+        statistik.sedang,
+        statistik.rendah,
+        statistik.sangatRendah
+    ];
+
+    grafikRisiko.update();
+}
+
+let grafikRisiko = new Chart(chartRisiko, {
+    type: "bar",
+    data: {
+        labels: [
+            "Sangat Tinggi",
+            "Tinggi",
+            "Sedang",
+            "Rendah",
+            "Sangat Rendah"
+        ],
+        datasets: [{
+            label: "Jumlah Risiko",
+            data: [
+                hitungJumlahLevel("Sangat Tinggi"),
+                hitungJumlahLevel("Tinggi"),
+                hitungJumlahLevel("Sedang"),
+                hitungJumlahLevel("Rendah"),
+                hitungJumlahLevel("Sangat Rendah")
+            ]
+        }]
+    }
+});
+
+console.log(
+    "Persentase Sangat Tinggi:",
+    hitungPersentaseLevel("Sangat Tinggi")
+);
+
+// console.log("Jumlah Risiko Sangat Tinggi:", hitungJumlahLevel("Sangat Tinggi"));
+// console.log("Jumlah Risiko Tinggi:", hitungJumlahLevel("Tinggi"));
+// console.log("Jumlah Risiko Sedang:", hitungJumlahLevel("Sedang"));
+// console.log("Jumlah Risiko Rendah:", hitungJumlahLevel("Rendah"));
+// console.log("Jumlah Risiko Sangat Rendah:", hitungJumlahLevel("Sangat Rendah"));
+// console.log("Total Risiko:", data.length);
