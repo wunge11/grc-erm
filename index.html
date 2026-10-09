@@ -12,6 +12,9 @@
   <h1 id="judul">Sistem GRC</h1>
 
   <button id="tombol">Klik aku dong</button>
+  <button onclick="eksporCSV()">Ekspor ke CSV</button>
+  <input type="file" id="fileCSV" accept=".csv">
+  <button onclick="imporCSV()">Impor CSV</button>
 
   <h2>Tambah Risiko</h2>
 
@@ -67,7 +70,7 @@
       <h3>Persentase Risiko Tinggi</h3>
       <p id="persentaseTinggi">0%</p>
     </div>
-        <div class="card">
+    <div class="card">
       <h3>Persentase Risiko Sedang</h3>
       <p id="persentaseSedang">0%</p>
     </div>

@@ -84,6 +84,15 @@ function hapusRisiko(id) {
     }
 }
 
+function amankanTeks(teks) {
+    return String(teks)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function editRisiko(id) {
     let risiko = daftarRisiko.find(function (risiko) {
         return risiko.id === id;
@@ -108,12 +117,12 @@ function tampilkanRisiko(dataRisiko = daftarRisiko) {
 
     dataRisiko.forEach(function (risiko) {
         daftarHTML += "<tr>" +
-            "<td>" + risiko.nama + "</td>" +
+            "<td>" + amankanTeks(risiko.nama) + "</td>" +
             "<td>" + risiko.likelihood + "</td>" +
             "<td>" + risiko.impact + "</td>" +
             "<td>" + risiko.skor + "</td>" +
-            "<td class='level-" + risiko.level.toLowerCase().replaceAll(" ", "-") + "'>" +
-            risiko.level + "</td>" +
+            "<td class='level-" + amankanTeks(risiko.level).toLowerCase().replaceAll(" ", "-") + "'>" +
+            amankanTeks(risiko.level) + "</td>" +
             "<td>" +
             "<button onclick='editRisiko(" + risiko.id + ")'>Edit</button> " +
             "<button onclick='hapusRisiko(" + risiko.id + ")'>Hapus</button>" +
@@ -186,6 +195,22 @@ tambahRisiko.addEventListener("click", function () {
         return;
     }
 
+    const namaNormal = namaRisiko.value.trim().toLowerCase();
+
+    const duplikat = daftarRisiko.some(function (risiko) {
+        return (
+            risiko.nama.trim().toLowerCase() === namaNormal &&
+            risiko.likelihood === nilaiLikelihood &&
+            risiko.impact === nilaiImpact &&
+            risiko.id !== idEdit
+        );
+    });
+
+    if (duplikat) {
+        alert("Risiko dengan nama, likelihood, dan impact yang sama sudah ada!");
+        return;
+    }
+
     let skor = nilaiLikelihood * nilaiImpact;
 
     let risikoBaru = {
@@ -228,6 +253,7 @@ tambahRisiko.addEventListener("click", function () {
 
 prosesFilter();
 updateDashboard();
+updateChart();
 
 function hitungJumlahLevel(level) {
     return daftarRisiko.filter(function (risiko) {
@@ -332,5 +358,212 @@ let grafikRisiko = new Chart(chartRisiko, {
     }
 });
 
+function eksporCSV() {
+    if (daftarRisiko.length === 0) {
+        alert("Belum ada data risiko untuk diekspor!");
+        return;
+    }
+
+    const kolom = [
+        "Nama Risiko",
+        "Likelihood",
+        "Impact",
+        "Skor",
+        "Level Risiko"
+    ];
+
+    const baris = daftarRisiko.map(risiko => [
+        risiko.nama,
+        risiko.likelihood,
+        risiko.impact,
+        risiko.skor,
+        risiko.level
+    ]);
+
+    const isiCSV = [kolom, ...baris]
+        .map(baris =>
+            baris.map(nilai =>
+                `"${String(nilai ?? "").replace(/"/g, '""')}"`
+            ).join(";")
+        )
+        .join("\r\n");
+
+    const blob = new Blob(
+        ["\uFEFF" + isiCSV],
+        { type: "text/csv;charset=utf-8;" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "laporan-risiko-grc.csv";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+}
+
+function imporCSV() {
+    const fileInput = document.getElementById("fileCSV");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Pilih file CSV terlebih dahulu!");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const teks = event.target.result.replace(/^\uFEFF/, "");
+        const baris = teks.split(/\r?\n/);
+
+        // Membaca kolom CSV, termasuk teks yang memakai tanda kutip.
+        function bacaBarisCSV(teksBaris) {
+            const hasil = [];
+            let nilai = "";
+            let dalamKutipan = false;
+
+            for (let i = 0; i < teksBaris.length; i++) {
+                const karakter = teksBaris[i];
+
+                if (karakter === '"') {
+                    if (
+                        dalamKutipan &&
+                        teksBaris[i + 1] === '"'
+                    ) {
+                        nilai += '"';
+                        i++;
+                    } else {
+                        dalamKutipan = !dalamKutipan;
+                    }
+
+                } else if (
+                    (karakter === "," || karakter === ";") &&
+                    !dalamKutipan
+                ) {
+                    hasil.push(nilai);
+                    nilai = "";
+                } else {
+                    nilai += karakter;
+                }
+            }
+
+            hasil.push(nilai);
+            return hasil;
+        }
+
+        if (baris.length < 2) {
+            alert("File CSV tidak memiliki data risiko!");
+            return;
+        }
+
+        const dataBaru = [];
+        let jumlahDuplikat = 0;
+
+        for (let i = 1; i < baris.length; i++) {
+            if (baris[i].trim() === "") continue;
+
+            const nilai = bacaBarisCSV(baris[i]);
+
+            if (nilai.length < 5) {
+                alert(
+                    `Baris ${i + 1} hanya terbaca ${nilai.length} kolom: ` +
+                    JSON.stringify(nilai)
+                );
+                return;
+            }
+
+            const nama = nilai[0].trim();
+            const l = Number(nilai[1]);
+            const im = Number(nilai[2]);
+
+            if (
+                nama === "" ||
+                nilai[1].trim() === "" ||
+                nilai[2].trim() === "" ||
+                !Number.isInteger(l) ||
+                !Number.isInteger(im) ||
+                l < 1 || l > 5 ||
+                im < 1 || im > 5
+            ) {
+                alert(`Data tidak valid pada baris ${i + 1}.`);
+                return;
+            }
+
+
+            const skor = l * im;
+
+            // Cek apakah risiko sudah ada, tanpa membedakan huruf besar-kecil.
+            const namaNormal = nama.toLowerCase();
+
+            const sudahAda = daftarRisiko.some(r =>
+                r.nama.trim().toLowerCase() === namaNormal &&
+                r.likelihood === l &&
+                r.impact === im
+            );
+
+            const duplikatDiImpor = dataBaru.some(r =>
+                r.nama.trim().toLowerCase() === namaNormal &&
+                r.likelihood === l &&
+                r.impact === im
+            );
+
+            if (sudahAda || duplikatDiImpor) {
+                jumlahDuplikat++;
+                continue;
+            }
+
+            dataBaru.push({
+                nama: nama,
+                likelihood: l,
+                impact: im,
+                skor: skor,
+                level: tentukanLevelRisiko(skor)
+            });
+        }
+
+        if (dataBaru.length === 0) {
+            alert("Tidak ada data risiko yang bisa diimpor!");
+            return;
+        }
+
+        // Buat ID yang tidak bentrok dengan data yang sudah ada.
+        let idBaru = Date.now();
+
+        dataBaru.forEach(function (risiko) {
+            while (
+                daftarRisiko.some(r => r.id === idBaru) ||
+                dataBaru.some(r => r !== risiko && r.id === idBaru)
+            ) {
+                idBaru++;
+            }
+
+            risiko.id = idBaru++;
+        });
+
+        daftarRisiko.push(...dataBaru);
+
+        localStorage.setItem(
+            "daftarRisiko",
+            JSON.stringify(daftarRisiko)
+        );
+
+        prosesFilter();
+        updateDashboard();
+        updateChart();
+
+        alert(
+            `${dataBaru.length} risiko berhasil diimpor.\n` +
+            `${jumlahDuplikat} data duplikat dilewati.`
+        );
+        fileInput.value = "";
+    };
+
+    reader.readAsText(file, "UTF-8");
+}
 
 
