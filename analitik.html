@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+
+    <title>Analitik Risiko | GRC-ERM</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h2>GRC-ERM</h2>
+                <p>Risk Management System</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-link">
+                    Dashboard
+                </a>
+
+                <a href="analitik.html" class="nav-link active">
+                    Analitik Risiko
+                </a>
+
+                <a href="tambah-risiko.html" class="nav-link">
+                    Tambah Risiko
+                </a>
+
+                <a href="daftar-risiko.html" class="nav-link">
+                    Daftar Risiko
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Konten utama -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <h1>Analitik Risiko</h1>
+                    <p>
+                        Pantau distribusi dan tingkat risiko
+                        dalam sistem GRC-ERM.
+                    </p>
+                </div>
+            </header>
+
+            <section class="page-section">
+                <div class="panel">
+                    <h2>Distribusi Tingkat Risiko</h2>
+                    <p>
+                        Grafik berikut akan menampilkan jumlah
+                        risiko berdasarkan tingkat risikonya.
+                    </p>
+
+                    <div class="chart-container">
+                        <canvas id="chartRisiko"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>Persentase Risiko</h2>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Sangat Tinggi</h3>
+                            <p id="persentaseSangatTinggi">0%</p>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Tinggi</h3>
+                            <p id="persentaseTinggi">0%</p>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Sedang</h3>
+                            <p id="persentaseSedang">0%</p>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Rendah</h3>
+                            <p id="persentaseRendah">0%</p>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Sangat Rendah</h3>
+                            <p id="persentaseSangatRendah">0%</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>GRC-ERM · Risk Management System</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Library grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="analitik.js"></script>
+
+    <!-- JavaScript analitik akan dihubungkan berikutnya -->
+
+</body>
+
+</html>

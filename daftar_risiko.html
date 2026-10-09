@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+
+    <title>Daftar Risiko | GRC-ERM</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <h2>GRC-ERM</h2>
+                <p>Risk Management System</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-link">
+                    Dashboard
+                </a>
+
+                <a href="analitik.html" class="nav-link">
+                    Analitik Risiko
+                </a>
+
+                <a href="tambah-risiko.html" class="nav-link">
+                    Tambah Risiko
+                </a>
+
+                <a href="daftar-risiko.html" class="nav-link active">
+                    Daftar Risiko
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <h1>Daftar Risiko</h1>
+                    <p>
+                        Kelola, cari, dan tinjau seluruh
+                        risiko yang tercatat.
+                    </p>
+                </div>
+            </header>
+
+            <section class="page-section">
+
+                <div class="panel">
+                    <h2>Impor dan Ekspor Data</h2>
+
+                    <div class="form-actions">
+                        <button
+                            type="button"
+                            onclick="eksporCSV()"
+                        >
+                            Ekspor CSV
+                        </button>
+
+                        <input
+                            type="file"
+                            id="fileCSV"
+                            accept=".csv,text/csv"
+                            aria-label="Pilih file CSV"
+                        >
+
+                        <button
+                            type="button"
+                            onclick="imporCSV()"
+                        >
+                            Impor CSV
+                        </button>
+                    </div>
+
+                    <p
+                        id="hasilRisiko"
+                        class="feedback-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+                </div>
+
+                <div class="panel">
+                    <h2>Register Risiko</h2>
+
+                    <div class="toolbar">
+                        <div class="form-group">
+                            <label for="cariRisiko">
+                                Cari Risiko
+                            </label>
+
+                            <input
+                                type="search"
+                                id="cariRisiko"
+                                placeholder="Cari nama risiko..."
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="filterLevel">
+                                Filter Tingkat Risiko
+                            </label>
+
+                            <select id="filterLevel">
+                                <option value="Semua">Semua Tingkat</option>
+                                <option value="Sangat Tinggi">Sangat Tinggi</option>
+                                <option value="Tinggi">Tinggi</option>
+                                <option value="Sedang">Sedang</option>
+                                <option value="Rendah">Rendah</option>
+                                <option value="Sangat Rendah">Sangat Rendah</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="urutkanRisiko">
+                                Urutkan Skor
+                            </label>
+
+                            <select id="urutkanRisiko">
+                                <option value="desc">Tertinggi ke Terendah</option>
+                                <option value="asc">Terendah ke Tertinggi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Nama Risiko</th>
+                                    <th>Likelihood</th>
+                                    <th>Impact</th>
+                                    <th>Skor</th>
+                                    <th>Tingkat Risiko</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="daftarRisiko">
+                                <!-- Data akan diisi oleh JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <footer class="footer">
+                <p>GRC-ERM · Risk Management System</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="daftar_risiko.js"></script>
+    <script src="csv_risiko.js"></script>
+
+    <!-- JavaScript akan dihubungkan setelah penyesuaian -->
+
+</body>
+</html>

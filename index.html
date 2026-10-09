@@ -3,118 +3,332 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Sistem Manajemen Risiko GRC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#142b4a">
+
+  <title>GRC-ERM | Risk Management</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <div class="app-layout">
 
-  <h1 id="judul">Sistem GRC</h1>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <a href="#overview" class="brand">
+        <span class="brand-icon">G</span>
+        <span>
+          <strong>GRC-ERM</strong>
+          <small>Risk Management</small>
+        </span>
+      </a>
 
-  <button id="tombol">Klik aku dong</button>
-  <button onclick="eksporCSV()">Ekspor ke CSV</button>
-  <input type="file" id="fileCSV" accept=".csv">
-  <button onclick="imporCSV()">Impor CSV</button>
+      <p class="nav-label">MENU UTAMA</p>
 
-  <h2>Tambah Risiko</h2>
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-link active">
+          <span>▦</span> Dashboard
+        </a>
+        <a href="#analytics" class="nav-link">
+          <span>▥</span> Analitik Risiko
+        </a>
+        <a href="#risk-form" class="nav-link">
+          <span>＋</span> Tambah Risiko
+        </a>
+        <a href="#risk-register" class="nav-link">
+          <span>☷</span> Daftar Risiko
+        </a>
+      </nav>
 
-  <input type="text" id="namaRisiko" placeholder="Masukkan nama risiko">
-  <input type="number" id="likelihood" placeholder="Likelihood(1-5)" min="1" max="5">
-  <input type="number" id="impact" placeholder="Impact(1-5)" min="1" max="5">
-  <button id="tambahRisiko">Tambah Risiko</button>
-  <button id="batalEdit" style="display: none;">Batal</button>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        Sistem Manajemen Risiko
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+
+      <!-- HEADER -->
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">GOVERNANCE, RISK & COMPLIANCE</p>
+          <h1 id="judul">Sistem GRC</h1>
+          <p class="page-description">
+            Pantau, analisis, dan kelola risiko dalam satu tempat.
+          </p>
+        </div>
 
 
-  <p id="hasilRisiko"></p>
+        <div class="topbar-actions">
+          <div class="system-status">
+            <span class="status-dot"></span>
+            <span>Sistem Aktif</span>
+          </div>
+        </div>
+      </header>
 
-  <h2>Distribusi Level Risiko</h2>
+      <!-- NOTIFIKASI -->
+      <p id="hasilRisiko" class="feedback-message" role="status" aria-live="polite"></p>
 
-  <canvas id="chartRisiko"></canvas>
+      <!-- RINGKASAN -->
+      <section id="overview" class="page-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RINGKASAN</p>
+            <h2>Ikhtisar Risiko</h2>
+            <p class="section-description">
+              Ringkasan kondisi risiko yang tercatat dalam sistem.
+            </p>
+          </div>
+        </div>
 
-  <h2>Daftar Risiko</h2>
+        <div class="dashboard">
+          <div class="card card-primary">
+            <span class="stat-label">Total Risiko</span>
+            <p id="totalRisiko">0</p>
+            <small>Seluruh risiko tercatat</small>
+          </div>
 
-  <div class="dashboard">
-    <div class="card">
-      <h3>Total Risiko</h3>
-      <p id="totalRisiko">0</p>
-    </div>
-    <div class="card">
-      <h3>Sangat Tinggi</h3>
-      <p id="jumlahSangatTinggi">0</p>
-    </div>
-    <div class="card">
-      <h3>Tinggi</h3>
-      <p id="jumlahTinggi">0</p>
-    </div>
-    <div class="card">
-      <h3>Sedang</h3>
-      <p id="jumlahSedang">0</p>
-    </div>
-    <div class="card">
-      <h3>Rendah</h3>
-      <p id="jumlahRendah">0</p>
-    </div>
-    <div class="card">
-      <h3>Sangat Rendah</h3>
-      <p id="jumlahSangatRendah">0</p>
-    </div>
-    <div class="card">
-      <h3>Rata-rata Skor Risiko</h3>
-      <p id="rataRataSkor">0</p>
-    </div>
-    <div class="card">
-      <h3>Persentase Risiko Sangat Tinggi</h3>
-      <p id="persentaseSangatTinggi">0%</p>
-    </div>
-    <div class="card">
-      <h3>Persentase Risiko Tinggi</h3>
-      <p id="persentaseTinggi">0%</p>
-    </div>
-    <div class="card">
-      <h3>Persentase Risiko Sedang</h3>
-      <p id="persentaseSedang">0%</p>
-    </div>
-    <div class="card">
-      <h3>Persentase Risiko Rendah</h3>
-      <p id="persentaseRendah">0%</p>
-    </div>
-    <div class="card">
-      <h3>Persentase Risiko Sangat Rendah</h3>
-      <p id="persentaseSangatRendah">0%</p>
-    </div>
+          <div class="card stat-critical">
+            <span class="stat-label">Sangat Tinggi</span>
+            <p id="jumlahSangatTinggi">0</p>
+            <small>Perlu perhatian prioritas</small>
+          </div>
+
+          <div class="card stat-high">
+            <span class="stat-label">Tinggi</span>
+            <p id="jumlahTinggi">0</p>
+            <small>Perlu penanganan</small>
+          </div>
+
+          <div class="card stat-medium">
+            <span class="stat-label">Sedang</span>
+            <p id="jumlahSedang">0</p>
+            <small>Perlu pemantauan</small>
+          </div>
+
+          <div class="card stat-low">
+            <span class="stat-label">Rendah</span>
+            <p id="jumlahRendah">0</p>
+            <small>Risiko terkendali</small>
+          </div>
+
+          <div class="card stat-very-low">
+            <span class="stat-label">Sangat Rendah</span>
+            <p id="jumlahSangatRendah">0</p>
+            <small>Risiko minimal</small>
+          </div>
+
+          <div class="card">
+            <span class="stat-label">Rata-rata Skor</span>
+            <p id="rataRataSkor">0</p>
+            <small>Rata-rata skor seluruh risiko</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- ANALITIK -->
+      <section id="analytics" class="page-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RISK ANALYTICS</p>
+            <h2>Analisis Risiko</h2>
+            <p class="section-description">
+              Distribusi risiko berdasarkan tingkat keparahan.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel chart-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Distribusi Level Risiko</h3>
+              <p>Perbandingan jumlah risiko pada setiap level.</p>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="chartRisiko"></canvas>
+          </div>
+        </div>
+
+        <div class="percentage-grid">
+          <div class="percentage-card">
+            <span class="percentage-indicator indicator-critical"></span>
+            <div>
+              <small>Sangat Tinggi</small>
+              <p id="persentaseSangatTinggi">0%</p>
+            </div>
+          </div>
+
+          <div class="percentage-card">
+            <span class="percentage-indicator indicator-high"></span>
+            <div>
+              <small>Tinggi</small>
+              <p id="persentaseTinggi">0%</p>
+            </div>
+          </div>
+
+          <div class="percentage-card">
+            <span class="percentage-indicator indicator-medium"></span>
+            <div>
+              <small>Sedang</small>
+              <p id="persentaseSedang">0%</p>
+            </div>
+          </div>
+
+          <div class="percentage-card">
+            <span class="percentage-indicator indicator-low"></span>
+            <div>
+              <small>Rendah</small>
+              <p id="persentaseRendah">0%</p>
+            </div>
+          </div>
+
+          <div class="percentage-card">
+            <span class="percentage-indicator indicator-very-low"></span>
+            <div>
+              <small>Sangat Rendah</small>
+              <p id="persentaseSangatRendah">0%</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FORM TAMBAH RISIKO -->
+      <section id="risk-form" class="page-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RISK INPUT</p>
+            <h2>Tambah Risiko</h2>
+            <p class="section-description">
+              Masukkan risiko baru untuk dianalisis.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="form-grid">
+            <div class="form-field form-field-wide">
+              <label for="namaRisiko">Nama Risiko</label>
+              <input type="text" id="namaRisiko" placeholder="Contoh: Kebocoran data">
+            </div>
+
+            <div class="form-field">
+              <label for="likelihood">Likelihood</label>
+              <input type="number" id="likelihood" placeholder="1–5" min="1" max="5">
+              <small>Probabilitas terjadinya risiko.</small>
+            </div>
+
+            <div class="form-field">
+              <label for="impact">Impact</label>
+              <input type="number" id="impact" placeholder="1–5" min="1" max="5">
+              <small>Dampak jika risiko terjadi.</small>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="tambahRisiko" class="btn btn-primary">
+              + Tambah Risiko
+            </button>
+
+            <button type="button" id="batalEdit" class="btn btn-secondary" style="display: none;">
+              Batal
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- DAFTAR RISIKO -->
+      <section id="risk-register" class="page-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RISK REGISTER</p>
+            <h2>Daftar Risiko</h2>
+            <p class="section-description">
+              Cari, filter, urutkan, dan kelola risiko yang tercatat.
+            </p>
+          </div>
+        </div>
+
+        <!-- IMPOR DAN EKSPOR -->
+        <div class="panel import-export-panel">
+          <div>
+            <h3>Data Risiko</h3>
+            <p>Impor data dari CSV atau ekspor laporan risiko.</p>
+          </div>
+
+          <div class="file-actions">
+            <button type="button" onclick="eksporCSV()" class="btn btn-secondary">
+              ↓ Ekspor CSV
+            </button>
+
+            <input type="file" id="fileCSV" accept=".csv" aria-label="Pilih file CSV untuk diimpor">
+
+            <button type="button" onclick="imporCSV()" class="btn btn-primary">
+              ↑ Impor CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- PENCARIAN DAN FILTER -->
+        <div class="panel toolbar">
+          <div class="search-field">
+            <label for="cariRisiko">Cari risiko</label>
+            <input type="text" id="cariRisiko" placeholder="Cari nama risiko...">
+          </div>
+
+          <div class="filter-field">
+            <label for="filterLevel">Filter level</label>
+            <select id="filterLevel">
+              <option value="Semua">Semua Level</option>
+              <option value="Sangat Tinggi">Sangat Tinggi</option>
+              <option value="Tinggi">Tinggi</option>
+              <option value="Sedang">Sedang</option>
+              <option value="Rendah">Rendah</option>
+              <option value="Sangat Rendah">Sangat Rendah</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="urutkanRisiko">Urutkan skor</label>
+            <select id="urutkanRisiko">
+              <option value="terbesar">Skor Terbesar → Terkecil</option>
+              <option value="terkecil">Skor Terkecil → Terbesar</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TABEL -->
+        <div class="table-panel">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama Risiko</th>
+                  <th>Likelihood</th>
+                  <th>Impact</th>
+                  <th>Skor</th>
+                  <th>Level</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody id="daftarRisiko"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span>GRC-ERM · Sistem Manajemen Risiko</span>
+        <span>Risk monitoring &amp; analytics</span>
+      </footer>
+
+    </main>
   </div>
-
-  <input type="text" id="cariRisiko" placeholder="Cari risiko...">
-
-  <select id="filterLevel">
-    <option value="Semua">Semua Level</option>
-    <option value="Sangat Tinggi">Sangat Tinggi</option>
-    <option value="Tinggi">Tinggi</option>
-    <option value="Sedang">Sedang</option>
-    <option value="Rendah">Rendah</option>
-    <option value="Sangat Rendah">Sangat Rendah</option>
-  </select>
-
-  <select id="urutkanRisiko">
-    <option value="terbesar">Skor Terbesar → Terkecil</option>
-    <option value="terkecil">Skor Terkecil → Terbesar</option>
-  </select>
-
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Nama Risiko</th>
-        <th>Likelihood</th>
-        <th>Impact</th>
-        <th>Skor</th>
-        <th>Level</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-
-    <tbody id="daftarRisiko">
-    </tbody>
-  </table>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>

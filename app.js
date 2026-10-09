@@ -251,10 +251,6 @@ tambahRisiko.addEventListener("click", function () {
 
 });
 
-prosesFilter();
-updateDashboard();
-updateChart();
-
 function hitungJumlahLevel(level) {
     return daftarRisiko.filter(function (risiko) {
         return risiko.level === level;
@@ -321,20 +317,6 @@ function updateDashboard() {
     rataRataSkor.textContent = rataRata.toFixed(1);
 }
 
-function updateChart() {
-    let statistik = ambilStatistikRisiko();
-
-    grafikRisiko.data.datasets[0].data = [
-        statistik.sangatTinggi,
-        statistik.tinggi,
-        statistik.sedang,
-        statistik.rendah,
-        statistik.sangatRendah
-    ];
-
-    grafikRisiko.update();
-}
-
 let grafikRisiko = new Chart(chartRisiko, {
     type: "bar",
     data: {
@@ -357,6 +339,24 @@ let grafikRisiko = new Chart(chartRisiko, {
         }]
     }
 });
+
+prosesFilter();
+updateDashboard();
+updateChart();
+
+function updateChart() {
+    let statistik = ambilStatistikRisiko();
+
+    grafikRisiko.data.datasets[0].data = [
+        statistik.sangatTinggi,
+        statistik.tinggi,
+        statistik.sedang,
+        statistik.rendah,
+        statistik.sangatRendah
+    ];
+
+    grafikRisiko.update();
+}
 
 function eksporCSV() {
     if (daftarRisiko.length === 0) {
@@ -567,3 +567,19 @@ function imporCSV() {
 }
 
 
+window.addEventListener("storage", function (event) {
+    // Jalankan hanya jika data risiko berubah di tab lain.
+    if (event.key !== "daftarRisiko") {
+        return;
+    }
+
+    // Ambil ulang data terbaru dari localStorage.
+    daftarRisiko = event.newValue
+        ? JSON.parse(event.newValue)
+        : [];
+
+    // Perbarui seluruh tampilan dashboard.
+    prosesFilter();
+    updateDashboard();
+    updateChart();
+});
